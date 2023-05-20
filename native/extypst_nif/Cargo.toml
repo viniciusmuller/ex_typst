@@ -1,0 +1,14 @@
+[package]
+name = "extypst_nif"
+version = "0.1.0"
+authors = []
+edition = "2021"
+
+[lib]
+name = "extypst_nif"
+path = "src/lib.rs"
+crate-type = ["cdylib"]
+
+[dependencies]
+rustler = "0.28.0"
+typst = { git = "https://github.com/typst/typst" }
