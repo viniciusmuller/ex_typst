@@ -6,7 +6,7 @@ defmodule ExTypst do
 
   ```Elixir 
   # Write markup
-  template = """
+  template = \"""
     = Current Employees
     #table(
       columns: (1fr, auto, auto),
@@ -33,10 +33,6 @@ defmodule ExTypst do
   ```
   """
 
-  def add(a, b) do
-    ExTypst.NIF.add(a, b)
-  end
-
   @spec render_to_string(String.t(), list({atom, any})) :: String.t()
   @doc """
   Formats the given markup template with the given bindings, mostly 
@@ -51,7 +47,46 @@ defmodule ExTypst do
   # TODO
   """
   def render_to_pdf(typst_markup, bindings \\ []) do
-    _markup = render_to_string(typst_markup, bindings)
-    raise "TODO"
+    # For now, there's no stdio support or a nice API, so we are going to write
+    # the input as a temp file and use a nif to get its output as a Vec<u8>,
+    # then bring back to the elixir side as a binary
+
+    # TODO: work on https://github.com/typst/typst/issues/410
+    # TODO: add a function that simply given a string, builds the world and
+    # everything it needs in order to compile the file
+
+    markup = render_to_string(typst_markup, bindings)
+
+    input_filename = "__typst-input.typst"
+    output_filename = "__typst-oupt.typst"
+
+    tmp_dir = System.tmp_dir!()
+
+    input_path = Path.join(tmp_dir, input_filename)
+    output_path = Path.join(tmp_dir, output_filename)
+
+    File.write!(input_path, markup)
+
+    result =
+      case System.cmd("typst", ["compile", input_path, output_path]) do
+        {_, 0} -> {:ok, File.read!(output_path)}
+        {error, _} -> {:error, error}
+      end
+
+    File.rm!(input_path)
+    File.rm!(output_path)
+
+    result
+  end
+
+  @spec render_to_pdf!(String.t(), list({atom, any})) :: binary()
+  @doc """
+  Same as `render_to_pdf/2`, but raises if the rendering fails.
+  """
+  def render_to_pdf!(typst_markup, bindings \\ []) do
+    case render_to_pdf(typst_markup, bindings) do 
+      {:ok, pdf} -> pdf
+      {:error, reason} -> raise "could not build pdf: #{reason}"
+    end
   end
 end
