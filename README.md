@@ -2,7 +2,8 @@
 
 Elixir bindings and helpers to the `typst` typesetting system.
 
-> Currently, it is necessary to have `typst` on your path
+> Currently, it is necessary to have `typst` on your path.
+> 
 > Support for using typst directly is planned.
 
 ## Installation
