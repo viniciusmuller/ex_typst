@@ -6,36 +6,7 @@ defmodule ExTypst do
   Note that when using the formatting directives, they are exactly the same as
   `EEx`, so all of its constructs are supported.
 
-  # Example
-
-  ```elixir 
-  # Write markup
-  template = """
-    = Current Employees
-    #table(
-      columns: (1fr, auto, auto),
-      [*User*], [*Salary*], [*Age*],
-      <%= employees %>
-    )
-  \"""
-
-  # Add some data
-  employees = [
-    ["John", 2000, 20],
-    ["Mary", 3500, 26],
-  ]
-
-  # Convert it to a nice-looking PDF
-  {:ok, pdf_binary} = ExTypst.render_to_pdf(template, 
-    employees: ExTypst.Format.table_content(employees)
-  )
-
-  # Write to disk
-  File.write!("employees.pdf", pdf_binary)
-
-  # Or maybe send via email
-  Bamboo.Email.put_attachment(email, %Bamboo.Attachment{data: pdf_binary, filename: "employees.pdf"})
-  ```
+  See [Typst's documentation](https://typst.app/docs) for a quickstart.
 
   """
 

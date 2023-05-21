@@ -3,36 +3,41 @@
 Elixir bindings and helpers for the [`typst`](https://github.com/typst/typst)
 typesetting system.
 
+Check [Typst's documentation](https://typst.app/docs) for a quick start.
+
 # Usage
 
-```Elixir 
+```elixir 
 # Write typst markup
 template = """
 = Current Employees
 
-A *Serious Company* Report
+This is a report showing the company's current employees.
 
 #table(
   columns: (auto, 1fr, auto, auto),
-  [*No*], [*User*], [*Salary*], [*Age*],
+  [*No*], [*Name*], [*Salary*], [*Age*],
   <%= employees %>
 )
 """
 
-# create some data
+# Create some data
 defmodule Helper do 
-  @names ["John", "Nathalie", "Joe", "Jane", "Jose", "Alex", "Tyler"]
+  @names ["John", "Nathalie", "Joe", "Jane", "Tyler"]
+  @surnames ["Smith", "Johnson", "Williams", "Brown", "Jones", "Davis"]
 
   def build_employees(n) do 
     for n <- 1..n do 
-      [n, Enum.random(@names), Enum.random(1000..15_000), Enum.random(16..60)]
+      name = "#{Enum.random(@names)} #{Enum.random(@surnames)}"
+      salary = "US$ #{Enum.random(1000..15_000) / 1}"
+      [n, name, salary, Enum.random(16..60)]
     end
   end
 end
 
 # Convert it to a nice-looking PDF
 {:ok, pdf_binary} = ExTypst.render_to_pdf(template, 
-  employees: ExTypst.Format.table_content(Helper.build_employees(500))
+  employees: ExTypst.Format.table_content(Helper.build_employees(1_000))
 )
 
 # Write to disk
@@ -41,6 +46,8 @@ File.write!("employees.pdf", pdf_binary)
 # Or maybe send via email
 Bamboo.Email.put_attachment(email, %Bamboo.Attachment{data: pdf_binary, filename: "employees.pdf"})
 ```
+
+You can see the generated PDF [here](./examples/employees.pdf).
 
 ## Installation
 
