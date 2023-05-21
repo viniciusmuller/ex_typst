@@ -42,9 +42,10 @@ defmodule ExTypst do
     EEx.eval_string(typst_markup, bindings)
   end
 
-  @type pdf_opt :: {:extra_fonts, list(String.t)}
+  @type pdf_opt :: {:extra_fonts, list(String.t())}
 
-  @spec render_to_pdf(String.t(), list({atom, any}), list(pdf_opt)) :: {:ok, binary()} | {:error, String.t()}
+  @spec render_to_pdf(String.t(), list({atom, any}), list(pdf_opt)) ::
+          {:ok, binary()} | {:error, String.t()}
   @doc """
   # TODO
   """
@@ -59,7 +60,7 @@ defmodule ExTypst do
   Same as `render_to_pdf/2`, but raises if the rendering fails.
   """
   def render_to_pdf!(typst_markup, bindings \\ []) do
-    case render_to_pdf(typst_markup, bindings) do 
+    case render_to_pdf(typst_markup, bindings) do
       {:ok, pdf} -> pdf
       {:error, reason} -> raise "could not build pdf: #{reason}"
     end
