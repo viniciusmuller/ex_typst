@@ -53,6 +53,7 @@ defmodule ExTypst.MixProject do
         "lib",
         "native",
         "priv/native",
+        "priv/fonts",
         ".formatter.exs",
         "README.md",
         "LICENSE",
