@@ -39,6 +39,8 @@ defmodule ExTypst do
 
   """
 
+  @embedded_fonts [Path.join(:code.priv_dir(:ex_typst), "fonts")]
+
   @type formattable :: {atom, any}
 
   @spec render_to_string(String.t(), list(formattable)) :: String.t()
@@ -71,7 +73,7 @@ defmodule ExTypst do
     
   """
   def render_to_pdf(typst_markup, bindings \\ [], opts \\ []) do
-    extra_fonts = Keyword.get(opts, :extra_fonts, [])
+    extra_fonts = Keyword.get(opts, :extra_fonts, []) ++ @embedded_fonts
     markup = render_to_string(typst_markup, bindings)
     ExTypst.NIF.compile(markup, extra_fonts)
   end

@@ -1,6 +1,4 @@
 template = """
-#set text(font: "JetBrains Mono")
-
 = Current Employees
 
 A *Serious Company* Report
@@ -23,11 +21,8 @@ defmodule Helper do
 end
 
 {:ok, pdf_binary} = ExTypst.render_to_pdf(template, 
-  [employees: ExTypst.Format.table_content(Helper.build_employees(5_000))],
-  extra_fonts: ["/home/vini/.nix-profile/share/fonts"]
+  employees: ExTypst.Format.table_content(Helper.build_employees(5_000))
 )
-
-IO.inspect(pdf_binary)
 
 File.write!("employees.pdf", pdf_binary)
 IO.puts("Succesfully written employees.pdf file")
