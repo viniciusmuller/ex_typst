@@ -1,4 +1,9 @@
 template = """
+#set text(
+  font: "JetBrains Mono",
+  size: 11pt,
+)
+
 = Current Employees
 
 #table(
@@ -23,7 +28,8 @@ Benchee.run(
     "generate table" => 
       fn input -> 
         {:ok, _pdf_binary} = ExTypst.render_to_pdf(template, 
-          employees: ExTypst.Format.table_content(input)
+          [employees: ExTypst.Format.table_content(input)],
+          extra_fonts: ["/home/vini/.nix-profile/share/fonts"]
         )
       end,
   },

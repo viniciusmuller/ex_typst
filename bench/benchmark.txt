@@ -21,17 +21,17 @@ Benchmarking generate table with input 5000 entries ...
 
 ##### With input 1000 entries #####
 Name                     ips        average  deviation         median         99th %
-generate table        609.32        1.64 ms     ±1.27%        1.64 ms        1.71 ms
+generate table        100.91        9.91 ms    ±32.50%        9.74 ms       11.02 ms
 
 ##### With input 10000 entries #####
 Name                     ips        average  deviation         median         99th %
-generate table         69.44       14.40 ms     ±1.56%       14.33 ms       15.47 ms
+generate table         26.98       37.06 ms     ±2.33%       37.37 ms       38.78 ms
 
 ##### With input 500 entries #####
 Name                     ips        average  deviation         median         99th %
-generate table        1.01 K      986.89 μs     ±1.48%      988.37 μs     1007.75 μs
+generate table        138.35        7.23 ms     ±1.50%        7.19 ms        7.71 ms
 
 ##### With input 5000 entries #####
 Name                     ips        average  deviation         median         99th %
-generate table        143.73        6.96 ms     ±2.44%        6.90 ms        7.59 ms
+generate table         47.28       21.15 ms     ±1.26%       21.08 ms       21.97 ms
 

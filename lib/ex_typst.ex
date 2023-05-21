@@ -42,16 +42,16 @@ defmodule ExTypst do
     EEx.eval_string(typst_markup, bindings)
   end
 
-  @type pdf_opt :: {:fonts_paths, list(String.t)}
+  @type pdf_opt :: {:extra_fonts, list(String.t)}
 
   @spec render_to_pdf(String.t(), list({atom, any}), list(pdf_opt)) :: {:ok, binary()} | {:error, String.t()}
   @doc """
   # TODO
   """
   def render_to_pdf(typst_markup, bindings \\ [], opts \\ []) do
-    fonts_paths = Keyword.get(opts, :fonts_paths, [])
+    extra_fonts = Keyword.get(opts, :extra_fonts, [])
     markup = render_to_string(typst_markup, bindings)
-    ExTypst.NIF.compile(markup, fonts_paths)
+    ExTypst.NIF.compile(markup, extra_fonts)
   end
 
   @spec render_to_pdf!(String.t(), list({atom, any})) :: binary()
