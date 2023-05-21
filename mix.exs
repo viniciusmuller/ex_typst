@@ -21,7 +21,8 @@ defmodule ExTypst.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:rustler, "~> 0.28.0"}
+      {:rustler, "~> 0.28.0"},
+      {:benchee, "~> 1.0", only: :dev}
     ]
   end
 end

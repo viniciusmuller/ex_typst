@@ -1,0 +1,37 @@
+Operating System: Linux
+CPU Information: AMD Ryzen 7 5700X 8-Core Processor
+Number of Available Cores: 16
+Available memory: 31.26 GB
+Elixir 1.14.4
+Erlang 25.3.2
+
+Benchmark suite executing with the following configuration:
+warmup: 2 s
+time: 5 s
+memory time: 0 ns
+reduction time: 0 ns
+parallel: 1
+inputs: 1000 entries, 10000 entries, 500 entries, 5000 entries
+Estimated total run time: 28 s
+
+Benchmarking generate table with input 1000 entries ...
+Benchmarking generate table with input 10000 entries ...
+Benchmarking generate table with input 500 entries ...
+Benchmarking generate table with input 5000 entries ...
+
+##### With input 1000 entries #####
+Name                     ips        average  deviation         median         99th %
+generate table        609.32        1.64 ms     ±1.27%        1.64 ms        1.71 ms
+
+##### With input 10000 entries #####
+Name                     ips        average  deviation         median         99th %
+generate table         69.44       14.40 ms     ±1.56%       14.33 ms       15.47 ms
+
+##### With input 500 entries #####
+Name                     ips        average  deviation         median         99th %
+generate table        1.01 K      986.89 μs     ±1.48%      988.37 μs     1007.75 μs
+
+##### With input 5000 entries #####
+Name                     ips        average  deviation         median         99th %
+generate table        143.73        6.96 ms     ±2.44%        6.90 ms        7.59 ms
+
