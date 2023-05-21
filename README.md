@@ -10,22 +10,29 @@ typesetting system.
 template = """
 = Current Employees
 
+A *Serious Company* Report
+
 #table(
-  columns: (1fr, auto, auto),
-  [*User*], [*Salary*], [*Age*],
+  columns: (auto, 1fr, auto, auto),
+  [*No*], [*User*], [*Salary*], [*Age*],
   <%= employees %>
 )
 """
 
-# Add some data
-employees = [
-  ["John", 2000, 20],
-  ["Mary", 3500, 26],
-]
+# create some data
+defmodule Helper do 
+  @names ["John", "Nathalie", "Joe", "Jane", "Jose", "Alex", "Tyler"]
+
+  def build_employees(n) do 
+    for n <- 1..n do 
+      [n, Enum.random(@names), Enum.random(1000..15_000), Enum.random(16..60)]
+    end
+  end
+end
 
 # Convert it to a nice-looking PDF
 {:ok, pdf_binary} = ExTypst.render_to_pdf(template, 
-  employees: ExTypst.Format.table_content(employees)
+  employees: ExTypst.Format.table_content(Helper.build_employees(500))
 )
 
 # Write to disk
@@ -43,7 +50,7 @@ by adding `ex_typst` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:ex_typst, "~> 0.1.0"}
+    {:ex_typst, "~> 0.1"}
   ]
 end
 ```
