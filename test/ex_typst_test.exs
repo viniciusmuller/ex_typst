@@ -1,5 +1,6 @@
 defmodule ExTypstTest do
   use ExUnit.Case
+  doctest ExTypst
 
   test "render_to_string/2" do
     users = [
