@@ -39,6 +39,7 @@ defmodule ExTypst.MixProject do
       {:rustler, "~> 0.28.0"},
       {:benchee, "~> 1.0", only: :dev},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.3", only: :dev, runtime: false},
       {:ex_doc, "~> 0.27", only: :dev, runtime: false},
     ]
   end
