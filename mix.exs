@@ -18,8 +18,11 @@ defmodule ExTypst.MixProject do
 
       # Docs
       name: "ExTypst",
-      main: "ExTypst",
-      source_url: @source_url
+      source_url: @source_url,
+      docs: [
+        main: "readme",
+        extras: ["README.md"]
+      ]
     ]
   end
 
