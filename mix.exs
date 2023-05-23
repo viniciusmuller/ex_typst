@@ -2,7 +2,7 @@ defmodule ExTypst.MixProject do
   use Mix.Project
 
   @source_url "https://github.com/viniciusmuller/ex_typst"
-  @version "0.1.1"
+  @version "0.1.2"
 
   def project do
     [
