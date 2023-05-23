@@ -1,5 +1,13 @@
 defmodule ExTypst do
-  @moduledoc false
+  @moduledoc """
+  This module provides the core functions for interacting with
+  the `typst` markup language compiler.
+
+  Note that when using the formatting directives, they are exactly the same as
+  `EEx`, so all of its constructs are supported.
+
+  See [Typst's documentation](https://typst.app/docs) for a quickstart.
+  """
 
   @embedded_fonts [Path.join(:code.priv_dir(:ex_typst), "fonts")]
 
