@@ -28,4 +28,4 @@ end
 )
 
 File.write!("employees.pdf", pdf_binary)
-IO.puts("Succesfully written employees.pdf file")
+IO.puts("Successfully written employees.pdf file")
