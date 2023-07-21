@@ -33,4 +33,19 @@ defmodule ExTypstTest do
 
     assert ExTypst.render_to_string(content, users: formatted_users) == expected
   end
+
+  test "escapes content" do
+    content = """
+    = Heading
+
+    The name of the employee is <%= name %>. Content is properly escaped!
+    """
+
+    assert ExTypst.render_to_string(content, name: "\"*Strong*\"") ==
+      """
+      = Heading
+
+      The name of the employee is \"\\\"*Strong*\\\"\". Content is properly escaped!
+      """
+  end
 end

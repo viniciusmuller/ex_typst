@@ -11,7 +11,7 @@ defmodule ExTypst.FormatTest do
 
       expected = ~s/"John", "200", "10",\n  "Mary", "500", "100"/
 
-      assert ExTypst.Format.table_content(users) == expected
+      assert ExTypst.Format.table_content(users) == {:safe, expected}
     end
   end
 end

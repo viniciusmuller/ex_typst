@@ -10,12 +10,12 @@ This is a report showing the company's current employees.
 )
 """
 
-defmodule Helper do 
-  @names ["John", "Nathalie", "Joe", "Jane", "Tyler"]
+defmodule Helper do
+  @names ["John", "Nathalie", "Joe", "Jane", "Tyler", ~s(", [*Strong*], $pi$, //)]
   @surnames ["Smith", "Johnson", "Williams", "Brown", "Jones", "Davis"]
 
-  def build_employees(n) do 
-    for n <- 1..n do 
+  def build_employees(n) do
+    for n <- 1..n do
       name = "#{Enum.random(@names)} #{Enum.random(@surnames)}"
       salary = "US$ #{Enum.random(1000..15_000) / 1}"
       [n, name, salary, Enum.random(16..60)]
@@ -23,7 +23,7 @@ defmodule Helper do
   end
 end
 
-{:ok, pdf_binary} = ExTypst.render_to_pdf(template, 
+{:ok, pdf_binary} = ExTypst.render_to_pdf(template,
   employees: ExTypst.Format.table_content(Helper.build_employees(1_000))
 )
 
