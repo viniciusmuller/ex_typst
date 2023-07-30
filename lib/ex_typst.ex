@@ -25,7 +25,7 @@ defmodule ExTypst do
   ## Examples
 
       iex> ExTypst.render_to_string("= Hey <%= name %>!", name: "Jude")
-      "= Hey \\\"Jude\\\"!"
+      "= Hey #\\\"Jude\\\"!"
 
       iex> ExTypst.render_to_string("= Hey <%= ExTypst.raw(name) %>!", name: "Jude")
       "= Hey Jude!"

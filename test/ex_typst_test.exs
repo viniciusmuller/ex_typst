@@ -24,8 +24,8 @@ defmodule ExTypstTest do
     #table(
       columns: (1fr, auto, auto),
       [*User*], [*Income*], [*Tax*],
-      "John", "200", "10",
-      "Mary", "500", "100"
+      [#"John"], [#"200"], [#"10"],
+      [#"Mary"], [#"500"], [#"100"]
     )
     """
 
@@ -45,7 +45,7 @@ defmodule ExTypstTest do
       """
       = Heading
 
-      The name of the employee is \"\\\"*Strong*\\\"\". Content is properly escaped!
+      The name of the employee is #\"\\\"*Strong*\\\"\". Content is properly escaped!
       """
   end
 end

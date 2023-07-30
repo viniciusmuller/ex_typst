@@ -15,7 +15,7 @@ defmodule ExTypst.Engine do
 
   @doc false
   def typst_escape(bin) when is_binary(bin) do
-    [~s["], String.replace(bin, ~s["], ~s[\\"]), ~s["]]
+    [~s[#"], String.replace(bin, ~s["], ~s[\\"]), ~s["]]
   end
 
   @doc false
