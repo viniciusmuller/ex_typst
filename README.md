@@ -49,6 +49,11 @@ Bamboo.Email.put_attachment(email, %Bamboo.Attachment{data: pdf_binary, filename
 
 You can see the generated PDF [here](./examples/employees.pdf).
 
+## Security
+
+Please note that currently ExTypst is experimental and content added to
+templates is not escaped.
+
 ## Installation
 
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed
