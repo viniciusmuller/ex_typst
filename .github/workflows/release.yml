@@ -5,26 +5,34 @@ on:
     branches:
       - main
       - feat/rustler-precompiled
+    paths:
+      # Just run on main branch if "native" path changed.
+      - "native/**"
+      # Also run if this file changes.
+      - ".github/workflows/release.yml"
     tags:
       - "*"
+  pull_request:
+    paths:
+      # In PRs we only run if this file changes.
+      - ".github/workflows/release.yml"
+  workflow_dispatch:
 
 env:
   NIF_DIRECTORY: "native/extypst_nif"
 
 jobs:
   build_release:
-    name: NIF ${{ matrix.nif }} - ${{ matrix.job.target }} (${{ matrix.job.os }})
+    name: NIF ${{ matrix.nif }} - ${{ matrix.job.target }} (${{ matrix.job.os }} | ${{ matrix.job.variant || 'default' }})
     runs-on: ${{ matrix.job.os }}
+    permissions:
+      contents: write
     strategy:
       fail-fast: false
       matrix:
-        nif: ["2.16", "2.15"]
+        nif: ["2.15"]
         job:
-          - {
-              target: arm-unknown-linux-gnueabihf,
-              os: ubuntu-20.04,
-              use-cross: true,
-            }
+          - { target: aarch64-apple-darwin, os: macos-11 }
           - {
               target: aarch64-unknown-linux-gnu,
               os: ubuntu-20.04,
@@ -35,21 +43,55 @@ jobs:
               os: ubuntu-20.04,
               use-cross: true,
             }
-          - { target: aarch64-apple-darwin, os: macos-11 }
-          - {
-              target: riscv64gc-unknown-linux-gnu,
-              os: ubuntu-20.04,
-              use-cross: true,
-            }
+          # - { target: riscv64gc-unknown-linux-gnu, os: ubuntu-20.04, use-cross: true, cargo-args: "--no-default-features" }
           - { target: x86_64-apple-darwin, os: macos-11 }
-          - { target: x86_64-unknown-linux-gnu, os: ubuntu-20.04 }
+          - {
+              target: x86_64-pc-windows-gnu,
+              os: windows-2022,
+              rustflags: "-C target-feature=+fxsr,+sse,+sse2,+sse3,+ssse3,+sse4.1,+sse4.2,+popcnt,+avx,+fma",
+            }
+          - {
+              target: x86_64-pc-windows-gnu,
+              os: windows-2022,
+              variant: "legacy_cpu",
+            }
+          - {
+              target: x86_64-pc-windows-msvc,
+              os: windows-2019,
+              rustflags: "-C target-feature=+fxsr,+sse,+sse2,+sse3,+ssse3,+sse4.1,+sse4.2,+popcnt,+avx,+fma",
+            }
+          - {
+              target: x86_64-pc-windows-msvc,
+              os: windows-2019,
+              variant: "legacy_cpu",
+            }
+          - {
+              target: x86_64-unknown-freebsd,
+              os: ubuntu-22.04,
+              use-cross: true,
+              rustflags: "-C target-feature=+fxsr,+sse,+sse2,+sse3,+ssse3,+sse4.1,+sse4.2,+popcnt,+avx,+fma",
+            }
+          - {
+              target: x86_64-unknown-freebsd,
+              os: ubuntu-22.04,
+              use-cross: true,
+              variant: "legacy_cpu",
+            }
+          - {
+              target: x86_64-unknown-linux-gnu,
+              os: ubuntu-20.04,
+              rustflags: "-C target-feature=+fxsr,+sse,+sse2,+sse3,+ssse3,+sse4.1,+sse4.2,+popcnt,+avx,+fma",
+            }
+          - {
+              target: x86_64-unknown-linux-gnu,
+              os: ubuntu-20.04,
+              variant: "legacy_cpu",
+            }
           - {
               target: x86_64-unknown-linux-musl,
               os: ubuntu-20.04,
               use-cross: true,
             }
-          - { target: x86_64-pc-windows-gnu, os: windows-2019 }
-          - { target: x86_64-pc-windows-msvc, os: windows-2019 }
 
     steps:
       - name: Checkout source code
@@ -61,22 +103,37 @@ jobs:
           # Get the project version from mix.exs
           echo "PROJECT_VERSION=$(sed -n 's/^  @version "\(.*\)"/\1/p' mix.exs | head -n1)" >> $GITHUB_ENV
 
-      - name: Install Rust toolchain
-        uses: dtolnay/rust-toolchain@stable
+      - name: Maybe add Rust flags for compilation
+        shell: bash
+        run: |
+          echo "RUSTFLAGS=${{ matrix.job.rustflags }}" >> $GITHUB_ENV
+        if: ${{ matrix.job.rustflags }}
+
+      - name: Add target
+        shell: bash
+        run: |
+          rustup target add ${{ matrix.job.target }}
+
+      - uses: Swatinem/rust-cache@v2
         with:
-          toolchain: stable
-          target: ${{ matrix.job.target }}
+          prefix-key: v0-precomp
+          shared-key: ${{ matrix.job.target }}-${{ matrix.nif }}
+          workspaces: |
+            native/extypst_nif
 
       - name: Build the project
         id: build-crate
-        uses: philss/rustler-precompiled-action@v1.0.1
+        uses: philss/rustler-precompiled-action@v1.1.3
         with:
-          project-name: example
+          project-name: extypst_nif
           project-version: ${{ env.PROJECT_VERSION }}
           target: ${{ matrix.job.target }}
           nif-version: ${{ matrix.nif }}
           use-cross: ${{ matrix.job.use-cross }}
+          cross-version: ${{ matrix.job.cross-version || 'from-source' }}
           project-dir: "native/extypst_nif"
+          cargo-args: ${{ matrix.job.cargo-args }}
+          variant: ${{ matrix.job.variant }}
 
       - name: Artifact upload
         uses: actions/upload-artifact@v3
