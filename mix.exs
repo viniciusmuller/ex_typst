@@ -1,7 +1,7 @@
 defmodule ExTypst.MixProject do
   use Mix.Project
 
-  @source_url "https://github.com/viniciusmuller/ex_typst"
+  @source_url "https://github.com/leobessa/ex_typst"
   @version "0.1.3"
 
   def project do
@@ -36,6 +36,7 @@ defmodule ExTypst.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      {:rustler_precompiled, "~> 0.7", runtime: false},
       {:rustler, "~> 0.28.0"},
       {:benchee, "~> 1.0", only: :dev},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
