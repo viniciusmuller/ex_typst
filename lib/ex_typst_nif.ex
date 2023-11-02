@@ -22,7 +22,7 @@ defmodule ExTypst.NIF do
 
   use RustlerPrecompiled,
     otp_app: :typst_rustler,
-    crate: "typst_rustler",
+    crate: "extypst_nif",
     base_url: "#{github_url}/releases/download/v#{version}",
     force_build: System.get_env("EX_TYPST_RUSTLER_BUILD") in ["1", "true"],
     version: version,
