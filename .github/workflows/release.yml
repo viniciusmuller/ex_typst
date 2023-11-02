@@ -76,7 +76,7 @@ jobs:
           target: ${{ matrix.job.target }}
           nif-version: ${{ matrix.nif }}
           use-cross: ${{ matrix.job.use-cross }}
-          project-dir: "native/example"
+          project-dir: "native/extypst_nif"
 
       - name: Artifact upload
         uses: actions/upload-artifact@v3
