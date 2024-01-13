@@ -15,7 +15,7 @@ defmodule ExTypst.Format do
 
       iex> columns = [["John", 10, 20], ["Alice", 20, 30]]
       iex> ExTypst.Format.table_content(columns)
-      {:safe, ~s/[#"John"], [#"10"], [#"20"],\\n  [#"Alice"], [#"20"], [#"30"]/}
+      {:safe, ~s/[John], [10], [20],\\n  [Alice], [20], [30]/}
   """
   def table_content(columns) when is_list(columns) do
     content =

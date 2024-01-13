@@ -13,9 +13,88 @@ defmodule ExTypst.Engine do
            [line: -1]
          end)
 
-  @doc false
+  @doc ~S"""
+  Escape a string to be safe for handing off to typst.
+
+  ## Examples
+
+      iex> typst_escape("asfd@asdf") |> to_string()
+      "asfd\\@asdf"
+
+      iex> typst_escape("*_`<>@=-+/$\\'\"~-#") |> to_string()
+      "\\*\\_\\`\\<\\>\\@\\=\\-\\+\\/\\$\\\\\\'\\\"\\~\\-\\#"
+  """
+  @spec typst_escape(String.t()) :: iodata()
   def typst_escape(bin) when is_binary(bin) do
-    [~s[#"], String.replace(bin, ~s["], ~s[\\"]), ~s["]]
+    typst_escape(bin, 0, bin, [])
+  end
+
+  escapes = [
+    # Strong
+    {?*, "\\*"},
+    # Emphasis
+    {?_, "\\_"},
+    # Raw
+    {?`, "\\`"},
+    # Label (right)
+    {?<, "\\<"},
+    # Label (left)
+    {?>, "\\>"},
+    # Reference
+    {?@, "\\@"},
+    # Heading
+    {?=, "\\="},
+    # Bullet list
+    {?-, "\\-"},
+    # Numbered list
+    {?+, "\\+"},
+    # Term list
+    {?/, "\\/"},
+    # Math
+    {?$, "\\$"},
+    # Line break
+    {?\\, "\\\\"},
+    # Smart quote
+    {?', "\\'"},
+    # Smart quote
+    {?", "\\\""},
+    # Symbol shorthand
+    {?~, "\\~"},
+    # Code expression
+    {?\#, "\\#"}
+  ]
+
+  for {match, insert} <- escapes do
+    defp typst_escape(<<unquote(match), rest::bits>>, skip, original, acc) do
+      typst_escape(rest, skip + 1, original, [acc | unquote(insert)])
+    end
+  end
+
+  defp typst_escape(<<_char, rest::bits>>, skip, original, acc) do
+    typst_escape(rest, skip, original, acc, 1)
+  end
+
+  defp typst_escape(<<>>, _skip, _original, acc) do
+    acc
+  end
+
+  for {match, insert} <- escapes do
+    defp typst_escape(<<unquote(match), rest::bits>>, skip, original, acc, len) do
+      part = binary_part(original, skip, len)
+      typst_escape(rest, skip + len + 1, original, [acc, part | unquote(insert)])
+    end
+  end
+
+  defp typst_escape(<<_char, rest::bits>>, skip, original, acc, len) do
+    typst_escape(rest, skip, original, acc, len + 1)
+  end
+
+  defp typst_escape(<<>>, 0, original, _acc, _len) do
+    original
+  end
+
+  defp typst_escape(<<>>, skip, original, acc, len) do
+    [acc | binary_part(original, skip, len)]
   end
 
   @doc false
