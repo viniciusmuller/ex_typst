@@ -23,7 +23,7 @@ This is a report showing the company's current employees.
 
 # Create some data
 defmodule Helper do 
-  @names ["John", "Nathalie", "Joe", "Jane", "Tyler"]
+  @names ["John", "Nathalie", "Joe", "Jane", "Tyler", ~s(", [*Strong*], $pi$, //)]
   @surnames ["Smith", "Johnson", "Williams", "Brown", "Jones", "Davis"]
 
   def build_employees(n) do 
