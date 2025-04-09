@@ -26,5 +26,7 @@ defmodule ExTypst.Format do
   defp format_column_element(e) when is_integer(e) or is_binary(e), do: add_quotes(e)
   defp format_column_element(unknown), do: unknown |> inspect() |> add_quotes()
 
-  defp add_quotes(s), do: "\"#{s}\""
+  # use brackets for the cell content instead of double quotes, this seems to be 
+  # the preferred syntax for typst now
+  defp add_quotes(s), do: "[#{s}]"
 end
